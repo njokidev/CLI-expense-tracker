@@ -78,3 +78,17 @@ class Expense:
             cls(row["id"], row["amount"], row["category"], row["note"], row["date"])
             for row in rows
         ]
+
+    @classmethod
+    def update(cls, expense_id, amount, category, note, date):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            UPDATE expenses
+            SET amount=?, category=?, note=?, date=?
+            WHERE id=?
+        """, (amount, category, note, date, expense_id))
+
+        conn.commit()
+        conn.close()
